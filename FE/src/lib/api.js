@@ -40,4 +40,22 @@ export function fetchPlans() {
   return request('/api/plans');
 }
 
+export function fetchSubscriptions() {
+  return request('/api/subscriptions');
+}
+
+export function subscribeToPlan({ planCode, settings, timezone }) {
+  return request('/api/subscriptions', {
+    method: 'POST',
+    body: JSON.stringify({ planCode, settings, timezone })
+  });
+}
+
+export function updateSubscription({ id, active, settings, timezone }) {
+  return request(`/api/subscriptions/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ active, settings, timezone })
+  });
+}
+
 
