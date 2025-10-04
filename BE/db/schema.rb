@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_002016) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_003000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "books", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "testament", null: false
+    t.integer "position", null: false
+    t.integer "chapter_count", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_books_on_name", unique: true
+    t.index ["position"], name: "index_books_on_position", unique: true
+    t.index ["testament"], name: "index_books_on_testament"
+  end
+
+  create_table "chapters", force: :cascade do |t|
+    t.bigint "book_id", null: false
+    t.integer "number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id", "number"], name: "index_chapters_on_book_id_and_number", unique: true
+    t.index ["book_id"], name: "index_chapters_on_book_id"
+  end
 
   create_table "completions", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -62,6 +83,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_002016) do
     t.index ["supabase_user_id"], name: "index_users_on_supabase_user_id", unique: true
   end
 
+  add_foreign_key "chapters", "books"
   add_foreign_key "completions", "plans"
   add_foreign_key "completions", "users"
   add_foreign_key "subscriptions", "plans"

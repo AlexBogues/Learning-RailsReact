@@ -7,3 +7,6 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Seed the canonical Bible structure (books and chapters) without verse text
+Rake::Task["bible:seed_structure"].invoke
