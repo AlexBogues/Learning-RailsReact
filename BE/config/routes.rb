@@ -20,5 +20,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :plans, only: [:index]
+    resources :subscriptions, only: [:index, :create, :update]
   end
 end
