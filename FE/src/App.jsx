@@ -59,27 +59,37 @@ export default function App() {
         <TabView>
           <TabPanel header="Login">
             <form onSubmit={handleLogin} className="grid gap-3">
-              <span className="p-input-icon-left">
-                <i className="pi pi-envelope" />
-                <InputText value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
-              </span>
-              <span className="p-input-icon-left">
-                <i className="pi pi-lock" />
-                <Password value={password} onChange={e => setPassword(e.target.value)} toggleMask feedback={false} placeholder="Password" inputStyle={{ width: '100%' }} required />
-              </span>
+              <InputText 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                placeholder="Email"
+                required 
+              />
+              <Password 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                placeholder="Password"
+                feedback={false} 
+                required 
+              />
               <Button type="submit" label="Login" icon="pi pi-sign-in" loading={loading} />
             </form>
           </TabPanel>
           <TabPanel header="Register">
             <form onSubmit={handleRegister} className="grid gap-3">
-              <span className="p-input-icon-left">
-                <i className="pi pi-envelope" />
-                <InputText value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" required />
-              </span>
-              <span className="p-input-icon-left">
-                <i className="pi pi-lock" />
-                <Password value={password} onChange={e => setPassword(e.target.value)} toggleMask feedback={false} placeholder="Password" inputStyle={{ width: '100%' }} required />
-              </span>
+              <InputText 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                placeholder="Email"
+                required 
+              />
+              <Password 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                placeholder="Password"
+                feedback={false} 
+                required 
+              />
               <Dropdown value={timezone} onChange={e => setTimezone(e.value)} options={timezones} placeholder="Timezone" />
               <Button type="submit" label="Create Account" icon="pi pi-user-plus" loading={loading} />
             </form>

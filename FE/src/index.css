@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+/* Fix PrimeReact icon positioning that gets overridden by Tailwind */
+.p-input-icon-left {
+  position: relative;
+}
+
+.p-input-icon-left > i {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.p-input-icon-left > .p-inputtext,
+.p-input-icon-left > .p-password {
+  padding-left: 2.5rem;
+}
+
+/* Ensure icons are not italic */
+.pi {
+  font-style: normal !important;
+}
