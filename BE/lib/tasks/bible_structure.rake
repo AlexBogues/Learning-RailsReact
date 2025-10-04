@@ -93,8 +93,6 @@ namespace :bible do
         end
       end
     end
-
-    puts "Seeded books and chapters (structure only)."
   end
 end
 

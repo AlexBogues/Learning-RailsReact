@@ -17,4 +17,8 @@ Rails.application.routes.draw do
     post :login, to: "auth#login"
     get :confirm, to: "auth#confirm"
   end
+
+  namespace :api do
+    resources :plans, only: [:index]
+  end
 end
