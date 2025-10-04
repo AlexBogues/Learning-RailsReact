@@ -8,9 +8,11 @@ class SupabaseClient
     raise Error, "Missing SUPABASE_URL" if @base_url.to_s.strip.empty?
     raise Error, "Missing SUPABASE_ANON_KEY" if @api_key.to_s.strip.empty?
 
-    @connection = Faraday.new(url: File.join(@base_url, "auth/v1")) do |f|
+    @connection = Faraday.new(url: "#{@base_url.to_s.chomp('/')}\/auth\/v1") do |f|
       f.request :json
       f.response :json, content_type: /\bjson$/
+      f.options.timeout = 5
+      f.options.open_timeout = 2
       f.adapter Faraday.default_adapter
     end
   end
