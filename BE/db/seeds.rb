@@ -10,3 +10,22 @@
 
 # Seed the canonical Bible structure (books and chapters) without verse text
 Rake::Task["bible:seed_structure"].invoke
+
+# Seed initial reading plans (idempotent)
+[
+  {
+    code: "proverb_of_day",
+    name: "Proverb of the Day",
+    description: "Read the chapter of Proverbs corresponding to today's date."
+  },
+  {
+    code: "daily_chapter",
+    name: "Daily Chapter",
+    description: "Read one chapter per day through the Bible, starting from your chosen book and chapter."
+  }
+].each do |attrs|
+  plan = Plan.find_or_initialize_by(code: attrs[:code])
+  plan.name = attrs[:name]
+  plan.description = attrs[:description]
+  plan.save!
+end

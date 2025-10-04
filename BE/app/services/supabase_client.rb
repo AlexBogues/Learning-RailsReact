@@ -35,6 +35,16 @@ class SupabaseClient
     build_result(response)
   end
 
+  # Fetch the current user for a given access token
+  # Docs: GET /auth/v1/user with Authorization: Bearer <access_token>
+  def get_user(access_token:)
+    response = @connection.get("user") do |req|
+      req.headers["apikey"] = @api_key
+      req.headers["Authorization"] = "Bearer #{access_token}"
+    end
+    build_result(response)
+  end
+
   private
 
   def build_result(response)
