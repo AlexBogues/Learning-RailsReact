@@ -81,7 +81,7 @@ export default function Plans() {
         return (
           <Card key={p.id || p.code} title={p.name} subTitle={(p.code || '').replaceAll('_', ' ')}>
             <div className="flex items-start justify-between gap-4">
-              <p className="text-sm opacity-80">{p.description}</p>
+              <p className="text-sm opacity-80 flex-1 flex-basis-28rem">{p.description}</p>
               <Button
                 label={subscribed ? 'Unsubscribe' : 'Subscribe'}
                 icon={subscribed ? 'pi pi-minus' : 'pi pi-plus'}
