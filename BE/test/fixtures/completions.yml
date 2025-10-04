@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  plan: one
+  on_date: 2025-10-03
+  reading_ref: MyString
+  completed_at: 2025-10-03 20:14:33
+
+two:
+  user: two
+  plan: two
+  on_date: 2025-10-03
+  reading_ref: MyString
+  completed_at: 2025-10-03 20:14:33
