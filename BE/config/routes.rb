@@ -20,5 +20,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :plans, only: [:index]
+    resources :subscriptions, only: [:index, :create, :update]
+    resources :books, only: [:index]
+    get 'daily', to: 'daily#index'
+    resources :completions, only: [:index, :create]
+    get 'streaks', to: 'streaks#index'
   end
 end
