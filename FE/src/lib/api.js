@@ -16,6 +16,13 @@ async function request(path, options = {}) {
   try { json = text ? JSON.parse(text) : null; } catch (_) { json = null; }
 
   if (!res.ok) {
+    if (res.status === 401) {
+      try { localStorage.removeItem('access_token'); } catch (_) {}
+      // Use hard redirect to reset app state and land on login
+      if (typeof window !== 'undefined') {
+        window.location.replace('/');
+      }
+    }
     const message = (json && (json.error || json.message)) || `HTTP ${res.status}`;
     throw new Error(message);
   }
@@ -56,6 +63,32 @@ export function updateSubscription({ id, active, settings, timezone }) {
     method: 'PATCH',
     body: JSON.stringify({ active, settings, timezone })
   });
+}
+
+export function fetchBooks() {
+  return request('/api/books');
+}
+
+export function fetchDaily() {
+  return request('/api/daily');
+}
+
+export function markCompletion({ planId, date, readingRef }) {
+  return request('/api/completions', {
+    method: 'POST',
+    body: JSON.stringify({ planId, date, readingRef })
+  });
+}
+
+export function fetchCompletions({ from, to }) {
+  const params = new URLSearchParams();
+  if (from) params.append('from', from);
+  if (to) params.append('to', to);
+  return request(`/api/completions?${params.toString()}`);
+}
+
+export function fetchStreaks() {
+  return request('/api/streaks');
 }
 
 

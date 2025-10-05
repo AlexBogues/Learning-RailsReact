@@ -7,6 +7,7 @@ import Alert from './components/Alert'
 import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import Plans from './pages/Plans.jsx'
+import Tracking from './pages/Tracking.jsx'
 
 function AppInner() {
   const [loading, setLoading] = useState(false)
@@ -71,6 +72,18 @@ function AppInner() {
           isLoggedIn ? (
             <div className="min-h-screen bg-gray-100 p-4 flex justify-center items-start">
               <Plans />
+            </div>
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/tracking"
+        element={
+          isLoggedIn ? (
+            <div className="min-h-screen bg-gray-100 p-4 flex justify-center items-start">
+              <Tracking />
             </div>
           ) : (
             <Navigate to="/" replace />
