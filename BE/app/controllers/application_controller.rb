@@ -34,4 +34,18 @@ class ApplicationController < ActionController::Base
   def require_auth!
     head :unauthorized unless current_user
   end
+
+  def user_time_zone
+    tz = current_user&.timezone.presence || "UTC"
+    ActiveSupport::TimeZone[tz] ? tz : "UTC"
+  end
+
+  def subscription_time_zone(subscription)
+    tz = subscription&.timezone_override.presence || user_time_zone
+    ActiveSupport::TimeZone[tz] ? tz : user_time_zone
+  end
+
+  def today_in_zone(tz)
+    Time.now.in_time_zone(tz).to_date
+  end
 end
