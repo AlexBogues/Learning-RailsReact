@@ -2,85 +2,26 @@ import { useEffect, useState } from 'react'
 import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { TabView, TabPanel } from 'primereact/tabview'
-import { fetchDaily, markCompletion, fetchCompletions, fetchStreaks } from '../lib/api.js'
 import Heatmap from '../components/Heatmap.jsx'
+import { useDaily, useCompletions, useStreaks, useMarkCompletion } from '../hooks/useApi'
 import { format, subDays, startOfYear } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import 'react-calendar-heatmap/dist/styles.css'
 
 export default function Tracking() {
-  const [assignments, setAssignments] = useState([])
-  const [completions, setCompletions] = useState({})
-  const [streaks, setStreaks] = useState({})
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState({})
-  const [error, setError] = useState('')
+  const { data: daily, isLoading: loadingDaily, error: errorDaily } = useDaily()
+  const { data: comps, isLoading: loadingComps, error: errorComps } = useCompletions()
+  const { data: streaks, isLoading: loadingStreaks, error: errorStreaks } = useStreaks()
+  const mark = useMarkCompletion()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  async function loadData() {
-    try {
-      setError('')
-      setLoading(true)
-      const [dailyData, completionsData, streaksData] = await Promise.all([
-        fetchDaily(),
-        fetchCompletions({ 
-          from: format(startOfYear(new Date()), 'yyyy-MM-dd'),
-          to: format(new Date(), 'yyyy-MM-dd')
-        }),
-        fetchStreaks()
-      ])
-      
-      setAssignments(dailyData.assignments || [])
-      setCompletions(completionsData || {})
-      setStreaks(streaksData || {})
-    } catch (err) {
-      setError(err.message || 'Failed to load data')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const assignments = daily?.assignments || []
+  const completions = comps || {}
+  const loading = loadingDaily || loadingComps || loadingStreaks
+  const error = errorDaily?.message || errorComps?.message || errorStreaks?.message || ''
 
   async function handleMarkComplete(assignment) {
-    try {
-      setSaving(prev => ({ ...prev, [assignment.subscription_id]: true }))
-      await markCompletion({
-        planId: assignment.plan_id,
-        readingRef: assignment.reading_ref
-      })
-      
-      // Update local state optimistically
-      setAssignments(prev => 
-        prev.map(a => 
-          a.subscription_id === assignment.subscription_id 
-            ? { ...a, completed: true }
-            : a
-        )
-      )
-      
-      // Optimistically tick today in the corresponding plan heatmap
-      setCompletions(prev => {
-        const next = { ...prev }
-        const planCode = assignment.plan_code
-        const todayStr = format(new Date(), 'yyyy-MM-dd')
-        next[planCode] = { ...(next[planCode] || {}) }
-        next[planCode][todayStr] = true
-        return next
-      })
-      // Refresh streaks to reflect the new completion
-      try {
-        const s = await fetchStreaks()
-        setStreaks(s || {})
-      } catch (_) {}
-      
-    } catch (err) {
-      setError(err.message || 'Failed to mark as complete')
-    } finally {
-      setSaving(prev => ({ ...prev, [assignment.subscription_id]: false }))
-    }
+    await mark.mutateAsync({ planId: assignment.plan_id, readingRef: assignment.reading_ref })
   }
 
   function getHeatmapData(planCode) {
@@ -163,7 +104,7 @@ export default function Tracking() {
                   icon={assignment.completed ? "pi pi-check" : "pi pi-book"}
                   severity={assignment.completed ? "success" : "primary"}
                   disabled={assignment.completed}
-                  loading={saving[assignment.subscription_id]}
+                  loading={mark.isLoading}
                   onClick={() => handleMarkComplete(assignment)}
                 />
               </div>
