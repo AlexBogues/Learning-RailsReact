@@ -25,6 +25,4 @@ production:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
   # When Railway provides DATABASE_URL, Rails will use it.
-  # Optional: require SSL if provided
-  variables:
-    sslmode: <%= ENV.fetch("PGSSLMODE", "prefer") %>
+  # SSL is handled automatically by Railway's DATABASE_URL
