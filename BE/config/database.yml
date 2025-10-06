@@ -26,3 +26,8 @@ production:
   url: <%= ENV["DATABASE_URL"] %>
   # When Railway provides DATABASE_URL, Rails will use it.
   # SSL is handled automatically by Railway's DATABASE_URL
+
+cable:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
+  # Cable uses the same database as the main app
