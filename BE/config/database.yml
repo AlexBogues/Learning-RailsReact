@@ -31,3 +31,8 @@ cable:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
   # Cable uses the same database as the main app
+
+queue:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
+  # Queue uses the same database as the main app
