@@ -36,3 +36,7 @@ queue:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
   # Queue uses the same database as the main app
+
+  cache:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
